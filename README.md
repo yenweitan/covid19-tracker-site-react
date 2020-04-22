@@ -13,3 +13,8 @@ API used in this project: https://covid19.mathdro.id/api
 
 2. run ```npm i && npm start``` 
  
+## 🔧 Testing tools:
+Experimented and trialed with testcafe tool via a recommendation from my professor, Dr. Grebe.
+Used and recorded a sample of the click selector tests to manipulate all possible user manipulated sections and data.
+Easier approach compared to the common Selenium webdriver methods.
+Testcafe site: https://devexpress.github.io/testcafe/

@@ -1,41 +1,39 @@
-//api call file
 import axios from 'axios';
 
 const url = 'https://covid19.mathdro.id/api';
 
-//function called fetchData for real time async data parsing
-export const fetchData = async () => {
-    try {
-       const { data: {confirmed, recovered, deaths, lastUpdate} } = await axios.get(url);
-       
-       return { confirmed, recovered, deaths, lastUpdate};
-    } catch (error) {
-        
-    }
-}
+export const fetchData = async (country) => {
+  let changeableUrl = url;
 
-export const fetchDailyData = async() => {
-    try {
-        const { data } = await axios.get(`${url}/daily`);
+  if (country) {
+    changeableUrl = `${url}/countries/${country}`;
+  }
 
-        const modifiedData = data.map((dailyData) => ({
-            confirmed: dailyData.confirmed.total,
-            deaths: dailyData.deaths.total,
-            date: dailyData.reportDate,
-        }));
+  try {
+    const { data: { confirmed, recovered, deaths, lastUpdate } } = await axios.get(changeableUrl);
 
-        return modifiedData;
-    } catch (error) {
-        console.log(error);
-    }
-}
+    return { confirmed, recovered, deaths, lastUpdate };
+  } catch (error) {
+    return error;
+  }
+};
 
-export const countries = async() => {
-    try {
-        const response = await axios.get(`${url}/countries`);
+export const fetchDailyData = async () => {
+  try {
+    const { data } = await axios.get(`${url}/daily`);
 
-        console.log(response);
-    } catch (error) {
-        console.log(error);
-    }
-}
+    return data.map(({ confirmed, deaths, reportDate: date }) => ({ confirmed: confirmed.total, deaths: deaths.total, date }));
+  } catch (error) {
+    return error;
+  }
+};
+
+export const fetchCountries = async () => {
+  try {
+    const { data: { countries } } = await axios.get(`${url}/countries`);
+
+    return countries.map((country) => country.name);
+  } catch (error) {
+    return error;
+  }
+};
